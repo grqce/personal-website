@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grace Li</title>
+
+  <!-- Favicon: a miniature MetroCard -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 26'%3E%3Crect width='40' height='26' rx='3' fill='%23F5C518'/%3E%3Crect y='19' width='40' height='7' fill='%23111'/%3E%3Ctext x='20' y='14' font-family='Arial Black' font-size='10' fill='%230039A6' text-anchor='middle' font-weight='900'%3EMetro%3C/text%3E%3C/svg%3E">
+
+  <!-- React + Babel (CDN, no build step required) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="root"></div>
+
+  <!--
+    App source — loaded in order.
+    Babel standalone transforms each file in place (JSX + modern JS → browser JS).
+    Scripts share a global scope, so later files can use symbols from earlier files.
+      1. data.js          constants (LINES, INTERCHANGES, LINE_MAP, etc.)
+      2. MetroCard.jsx    splash screen
+      3. MapView.jsx      main subway map
+      4. PortfolioPage.jsx  per-line portfolio page
+      5. App.jsx          top-level router + ReactDOM.render
+  -->
+  <script type="text/babel" src="src/data.js"           data-presets="env,react"></script>
+  <script type="text/babel" src="src/MetroCard.jsx"     data-presets="env,react"></script>
+  <script type="text/babel" src="src/MapView.jsx"       data-presets="env,react"></script>
+  <script type="text/babel" src="src/PortfolioPage.jsx" data-presets="env,react"></script>
+  <script type="text/babel" src="src/App.jsx"           data-presets="env,react"></script>
+</body>
+</html>

@@ -21,13 +21,13 @@ function PortfolioPage({ line, onBack }) {
           position: 'relative',
           background: '#111',
           borderRadius: 3,
-          padding: '22px 20px 20px 18px',
-          display: 'flex', alignItems: 'center', gap: 24,
+          padding: '20px 20px 28px 18px',
+          display: 'flex', alignItems: 'flex-start', gap: 24,
           minWidth: 620,
         }}>
           {/* White accent stripe — thin band above the main content */}
           <div style={{
-            position: 'absolute', top: 5, left: 5, right: 5, height: 3,
+            position: 'absolute', top: 8, left: 5, right: 5, height: 1.5,
             background: '#fff', pointerEvents: 'none',
           }}/>
 
@@ -40,6 +40,7 @@ function PortfolioPage({ line, onBack }) {
               background: 'transparent', border: 'none', padding: 0, margin: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', flexShrink: 0,
+              marginTop: 6,
             }}
           >
             <svg width={36} height={36} viewBox="0 0 36 36" style={{ display: 'block' }}>
@@ -55,7 +56,7 @@ function PortfolioPage({ line, onBack }) {
           }}/>
 
           {/* Line name + caption */}
-          <div style={{ paddingTop: 6, flex: 1 }}>
+          <div style={{ paddingTop: 10, flex: 1 }}>
             <div style={{
               color: '#fff', fontSize: 36, fontWeight: 900,
               letterSpacing: '-0.4px', lineHeight: 1.02,
@@ -74,7 +75,7 @@ function PortfolioPage({ line, onBack }) {
 
           {/* Four line roundels — active one gets a white ring */}
           <div style={{
-            display: 'flex', alignItems: 'center', gap: 8, paddingTop: 6,
+            display: 'flex', alignItems: 'center', gap: 8, paddingTop: 14,
           }}>
             {LINES.map(l => (
               <div

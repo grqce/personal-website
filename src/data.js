@@ -117,3 +117,31 @@ const LINES = [
 ];
 
 const LINE_MAP = Object.fromEntries(LINES.map(l => [l.id, l]));
+
+/* ─── METRO CARDS (splash collage) ─────────────────────────
+ * Grid of transit cards from around the world. Each one is
+ * shown on the splash; hovering lifts it, clicking enters the
+ * map.
+ *   • `src`       — path to a real card image (e.g. assets/cards/london.png)
+ *   • `color`     — fallback bg for the stylized placeholder
+ *   • `textColor` — 'light' (default) or 'dark' for the city label
+ *   • `tilt`      — small rotation in degrees (-5 to 5) for vibes
+ *   • `lineId`    — optional future routing; unused today
+ * Add/remove freely — the splash re-flows automatically.
+ * ──────────────────────────────────────────────────────── */
+const PLACEHOLDER_CARD = 'assets/metrocard_front-Photoroom.png';
+
+const METRO_CARDS = [
+  { id: 'nyc',    name: 'New York',    src: PLACEHOLDER_CARD, tilt: -2 },
+  { id: 'london', name: 'London',      src: PLACEHOLDER_CARD, tilt:  3 },
+  { id: 'tokyo',  name: 'Tokyo',       src: PLACEHOLDER_CARD, tilt: -4 },
+  { id: 'paris',  name: 'Paris',       src: PLACEHOLDER_CARD, tilt:  2 },
+  { id: 'hk',     name: 'Hong Kong',   src: PLACEHOLDER_CARD, tilt: -3 },
+  { id: 'seoul',  name: 'Seoul',       src: PLACEHOLDER_CARD, tilt:  4 },
+  { id: 'berlin', name: 'Berlin',      src: PLACEHOLDER_CARD, tilt: -2 },
+  { id: 'moscow', name: 'Moscow',      src: PLACEHOLDER_CARD, tilt:  3 },
+  { id: 'sg',     name: 'Singapore',   src: PLACEHOLDER_CARD, tilt: -4 },
+  { id: 'sydney', name: 'Sydney',      src: PLACEHOLDER_CARD, tilt:  2 },
+  { id: 'toronto',name: 'Toronto',     src: PLACEHOLDER_CARD, tilt: -3 },
+  { id: 'mexico', name: 'Mexico City', src: PLACEHOLDER_CARD, tilt:  4 },
+];

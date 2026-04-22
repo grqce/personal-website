@@ -29,12 +29,14 @@
     Babel standalone transforms each file in place (JSX + modern JS → browser JS).
     Scripts share a global scope, so later files can use symbols from earlier files.
       1. data.js          constants (LINES, INTERCHANGES, LINE_MAP, etc.)
-      2. MetroCard.jsx    splash screen
-      3. MapView.jsx      main subway map
-      4. PortfolioPage.jsx  per-line portfolio page
-      5. App.jsx          top-level router + ReactDOM.render
+      2. TransitCards.jsx collection of swappable card fronts
+      3. MetroCard.jsx    splash screen
+      4. MapView.jsx      main subway map
+      5. PortfolioPage.jsx  per-line portfolio page
+      6. App.jsx          top-level router + ReactDOM.render
   -->
   <script type="text/babel" src="src/data.js"           data-presets="env,react"></script>
+  <script type="text/babel" src="src/TransitCards.jsx"  data-presets="env,react"></script>
   <script type="text/babel" src="src/MetroCard.jsx"     data-presets="env,react"></script>
   <script type="text/babel" src="src/MapView.jsx"       data-presets="env,react"></script>
   <script type="text/babel" src="src/PortfolioPage.jsx" data-presets="env,react"></script>

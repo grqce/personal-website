@@ -1,0 +1,13 @@
+{
+  "name": "graces-personal-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Grace Li's personal website — a subway-themed portfolio.",
+  "scripts": {
+    "start": "serve . --listen 8000",
+    "dev": "serve . --listen 8000 --no-clipboard"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}

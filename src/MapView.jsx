@@ -14,6 +14,96 @@ function MapView({ onSelectLine, onGoHome }) {
   const mapCondense =
     `translate(${cx} ${cy}) scale(${MAP_SX * MAP_SCALE * MAP_WIDE} ${MAP_SCALE}) translate(${-cx} ${-cy})`;
 
+  /* ─── Train animation ─────────────────────────────────────
+   * A single car rides along the active line. At interchange
+   * points it has a chance to hop to a crossing line, and at a
+   * terminal it reverses direction. getPointAtLength gives us
+   * both the position and tangent so the rectangle stays aligned
+   * with the track.
+   * ───────────────────────────────────────────────────────── */
+  const trainRef = React.useRef(null);
+  const pathRefs = React.useRef({});
+
+  React.useEffect(() => {
+    const state = {
+      lineId: 'about',
+      t: 0,
+      dir: 1,
+      cooldown: 0, // frames until another transfer is allowed
+    };
+    const SPEED = 0.45; // path units per frame (~27 px/s at 60fps)
+
+    // Find the length along `path` closest to the (x, y) anchor.
+    const lengthAt = (path, x, y) => {
+      const total = path.getTotalLength();
+      let bestT = 0, bestD = Infinity;
+      const SAMPLES = 500;
+      for (let i = 0; i <= SAMPLES; i++) {
+        const t = (i / SAMPLES) * total;
+        const p = path.getPointAtLength(t);
+        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+        if (d < bestD) { bestD = d; bestT = t; }
+      }
+      return bestT;
+    };
+
+    let raf;
+    const tick = () => {
+      const path = pathRefs.current[state.lineId];
+      if (!path) { raf = requestAnimationFrame(tick); return; }
+      const total = path.getTotalLength();
+
+      state.t += state.dir * SPEED;
+      if (state.t <= 0)      { state.t = 0;     state.dir =  1; }
+      else if (state.t >= total) { state.t = total; state.dir = -1; }
+
+      const pos = path.getPointAtLength(state.t);
+
+      if (state.cooldown <= 0) {
+        for (const ic of INTERCHANGES) {
+          if (!ic.lines.includes(state.lineId)) continue;
+          const dx = pos.x - ic.x, dy = pos.y - ic.y;
+          if (dx * dx + dy * dy < 64) { // within ~8 path units
+            // One decision per interchange pass. 40% transfer, 60% straight
+            // through. Cooldown is set either way so we don't re-roll while
+            // still sitting inside the interchange zone.
+            state.cooldown = 160;
+            if (Math.random() < 0.4) {
+              const otherId = ic.lines.find((l) => l !== state.lineId);
+              const otherPath = pathRefs.current[otherId];
+              if (otherPath) {
+                state.t = lengthAt(otherPath, ic.x, ic.y);
+                state.lineId = otherId;
+                state.dir = Math.random() < 0.5 ? 1 : -1;
+              }
+            }
+            break;
+          }
+        }
+      }
+      if (state.cooldown > 0) state.cooldown--;
+
+      // Tangent via two samples around current t
+      const step = 2;
+      const p1 = path.getPointAtLength(Math.max(0, state.t - step));
+      const p2 = path.getPointAtLength(Math.min(total, state.t + step));
+      const angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+
+      if (trainRef.current) {
+        const color = LINE_MAP[state.lineId].color;
+        trainRef.current.setAttribute(
+          'transform',
+          `translate(${pos.x} ${pos.y}) rotate(${angle})`
+        );
+        trainRef.current.setAttribute('fill', color);
+      }
+
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <div
       className="fade-in"
@@ -133,6 +223,18 @@ function MapView({ onSelectLine, onGoHome }) {
 
         {/* Condensed map: lines, interchanges, stations, labels */}
         <g transform={mapCondense}>
+          {/* Invisible geometry paths used by the train for getPointAtLength */}
+          {LINES.map((line) => (
+            <path
+              key={'train-geo-' + line.id}
+              ref={(el) => { pathRefs.current[line.id] = el; }}
+              d={line.path}
+              fill="none"
+              stroke="none"
+              pointerEvents="none"
+            />
+          ))}
+
           {/* Lines */}
           {LINES.map(line => (
             <g key={line.id}
@@ -176,6 +278,16 @@ function MapView({ onSelectLine, onGoHome }) {
               </g>
             );
           }))}
+
+          {/* Train car — rides the active line, same color, slightly thicker.
+              Rendered after stations so it visually passes over the dots. */}
+          <rect
+            ref={trainRef}
+            x={-17} y={-11.5} width={34} height={23}
+            rx={3} ry={3}
+            fill={LINES[0].color}
+            pointerEvents="none"
+          />
 
           {/* Terminal line-name labels */}
           {LINES.map(line => {

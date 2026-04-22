@@ -129,7 +129,7 @@ const LINE_MAP = Object.fromEntries(LINES.map(l => [l.id, l]));
  *   • `lineId`    — optional future routing; unused today
  * Add/remove freely — the splash re-flows automatically.
  * ──────────────────────────────────────────────────────── */
-const PLACEHOLDER_CARD = 'assets/metrocard_front-Photoroom.png';
+const PLACEHOLDER_CARD = 'assets/metrocard.png';
 
 const METRO_CARDS = [
   { id: 'nyc',    name: 'New York',    src: PLACEHOLDER_CARD, tilt: -2 },
